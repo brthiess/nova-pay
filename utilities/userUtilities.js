@@ -1,19 +1,14 @@
 const crypto = require('./cryptoUtilities');
 const db = require('../queries')
 
-const createUser = async (request, response) => {
-    const { email, password } = request.body;
+const createUser = async (email, password) => {
     var hashedPassword = await crypto.hashPasswordAsync(password);
     var secureId = crypto.createSecureId();
 
-    var results = await db.createUser(email, hashedPassword, secureId);
-    response.status(200).send({
-        "success": true
-    });
+    return await db.createUser(email, hashedPassword, secureId);
 }
 
-const signIn = async (request, response) => {
-    const { email, password } = request.body;
+const signIn = async (email, password, response) => {
 
     var results = await db.findUserByEmail(email);
 
@@ -23,12 +18,24 @@ const signIn = async (request, response) => {
     }
 
     if (passwordIsCorrect) {
-        response.cookie('secure_id', results.rows[0].secure_id, { maxAge: 900000, httpOnly: true });
+        response.cookie('secure_id', results.rows[0].secure_id, { maxAge: 900000, httpOnly: true, secure: true});
     }
 
-    response.status(200).send({
-        "success": passwordIsCorrect
-    });
+    return passwordIsCorrect;
+}
+
+const isLoggedIn = async (secureId) => {
+    let isLoggedIn = false;
+    try {
+        var results = await db.findUserBySecureId(secureId);
+        if (results && results.rows && results.rows.length > 0){
+            isLoggedIn = true;
+        }
+    }
+    catch(error){
+        console.error(error);
+    }
+    return isLoggedIn;
 }
 
 

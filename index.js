@@ -1,20 +1,12 @@
-const express = require('express')
-const userUtilities = require('./utilities/userUtilities')
-const app = express()
-const port = 3000
+const express = require("express");
+const app = express();
+const port = 3000;
+const routes = require('./routes/index');
 
-app.use(express.json()) 
+app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Nova Pay Api')
-})
-
-app.post('/create-user', userUtilities.createUser);
-
-app.post('/sign-in', userUtilities.signIn);
-
-
+app.use('/', routes);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+  console.log(`Example app listening at http://localhost:${port}`);
+});
