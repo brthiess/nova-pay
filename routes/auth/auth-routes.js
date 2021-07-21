@@ -1,13 +1,8 @@
-const express = require('express');
+const express = require("express");
 const userUtilities = require("../../utilities/userUtilities");
-const websiteRoutes = express.Router();
+const authRoutes = express.Router();
 
-
-websiteRoutes.get("/", (req, res) => {
-  res.send("Nova Pay Website");
-});
-
-websiteRoutes.post("/create-user", async function (request, response) {
+authRoutes.post("/create-user", async function (request, response) {
   const { email, password } = request.body;
   let success = false;
   try {
@@ -20,7 +15,7 @@ websiteRoutes.post("/create-user", async function (request, response) {
   });
 });
 
-websiteRoutes.post("/sign-in", async function (request, response) {
+authRoutes.post("/sign-in", async function (request, response) {
   const { email, password } = request.body;
   var result = await userUtilities.signIn(email, password, response);
   response.status(200).send({
@@ -28,4 +23,5 @@ websiteRoutes.post("/sign-in", async function (request, response) {
   });
 });
 
-module.exports = websiteRoutes;
+
+module.exports = authRoutes;

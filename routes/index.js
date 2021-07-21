@@ -1,8 +1,14 @@
-const express = require('express');
-const websiteRoutes = require('./website/website-routes');
+const express = require("express");
+const authRoutes = require("./auth/auth-routes");
+const apiRoutesV1 = require("./api/api-routes-v1");
 
-const apiRouter = express.Router();
+const routes = express.Router();
 
-apiRouter.use('/', websiteRoutes);
+routes.use("/auth", authRoutes);
+routes.use("/api/v1", apiRoutesV1);
 
-module.exports = apiRouter;
+routes.get("/", (req, res) => {
+  res.send("Nova Pay Website");
+});
+
+module.exports = routes;
