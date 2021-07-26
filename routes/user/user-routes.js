@@ -1,6 +1,8 @@
 const express = require("express");
 const userUtilities = require("../../utilities/userUtilities");
+const merchantUtilities = require("../../utilities/merchantUtilities");
 const authRoutes = express.Router();
+const authMiddleware = require("../../middleware/auth");
 
 authRoutes.post("/create-user", async function (request, response) {
   const { email, password } = request.body;
@@ -22,6 +24,5 @@ authRoutes.post("/sign-in", async function (request, response) {
     success: result,
   });
 });
-
 
 module.exports = authRoutes;

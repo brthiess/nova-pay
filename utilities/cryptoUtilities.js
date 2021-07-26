@@ -11,20 +11,20 @@ const createSecureId = () => {
   return token;
 };
 
+const createPrivateKey = () => {
+  var token = crypto.randomBytes(40).toString("hex");
+  return token;
+};
+
 const verifyPassword = async (password, hash) => {
   var same = await bcrypt.compare(password, hash);
   return same;
 };
 
-const verifySignature = async (
-  merchantId,
-  currentDateTime,
-  orderId,
-  signature
-) => {
-  //Make sure the current Date Time is within the last minute or so
+const verifySignature = async (merchantId, orderId, signature) => {
   //Go to database and get merchant private key from merchant id
-  //Sha 256 (merchantId + currentDateTime + orderId and verify it matches signature)
+  merchantUtilities.getPrivateKey(merchantId);
+  //Sha 256 (merchantId + orderId and verify it matches signature)
   //Return true if all this passes
 };
 
@@ -33,4 +33,5 @@ module.exports = {
   createSecureId,
   verifyPassword,
   verifySignature,
+  createPrivateKey,
 };

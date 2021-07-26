@@ -24,12 +24,14 @@ const signIn = async (email, password, response) => {
     return passwordIsCorrect;
 }
 
-const isLoggedIn = async (secureId) => {
+const isLoggedIn = async (secureId, username) => {
     let isLoggedIn = false;
     try {
         var results = await db.findUserBySecureId(secureId);
         if (results && results.rows && results.rows.length > 0){
-            isLoggedIn = true;
+            if (results.rows[0]["username"] === username) {
+                isLoggedIn = true;
+            }
         }
     }
     catch(error){
@@ -43,5 +45,6 @@ const isLoggedIn = async (secureId) => {
 
 module.exports = {
     createUser,
-    signIn
+    signIn,
+    isLoggedIn
 }

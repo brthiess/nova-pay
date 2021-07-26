@@ -13,7 +13,6 @@ apiRoutes.post("/charges", async function (request, response) {
 
   var isVerified = await cryptoUtilities.verifySignature(
     merchantId,
-    currentDateTime,
     orderId,
     signature
   );
