@@ -1,20 +1,27 @@
 const constants = require("../utilities/constants");
-const userUtilities = require("../utilities/userUtilities")
+const userUtilities = require("../utilities/userUtilities");
+const httpUtilities = require("../utilities/httpUtilities");
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   try {
-    var secureId = req.cookies[constants.secureId];
-    var username = req.cookies[constants.username];
-    if (userUtilities.isLoggedIn(secureId, username)){
-      console.log("Logged in");
+    let userInformation = httpUtilities.getUserInfoFromAuthorizationHeader(
+      req.headers.authorization
+    );
+    if (userInformation) {
+      let isLoggedIn = await userUtilities.isLoggedIn(
+        userInformation.secureId,
+        userInformation.username
+      );
+      if (isLoggedIn) {
+        next();
+        return;
+      }
     }
-    else {
-      console.log("NOT LOGGED IN");
-    }
+    throw "Invalid Request";
   } catch (error) {
     console.log(error);
     res.status(401).json({
-      error: new Error('Invalid request!')
+      error: new Error("Invalid Request"),
     });
   }
 };

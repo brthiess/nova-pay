@@ -12,8 +12,8 @@ const createSecureId = () => {
 };
 
 const createPrivateKey = () => {
-  var token = crypto.randomBytes(40).toString("hex");
-  return token;
+  var privateKey = crypto.randomBytes(40).toString("hex");
+  return "pk" + privateKey;
 };
 
 const verifyPassword = async (password, hash) => {

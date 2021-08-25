@@ -18,7 +18,8 @@ const signIn = async (email, password, response) => {
     }
 
     if (passwordIsCorrect) {
-        response.cookie('secure_id', results.rows[0].secure_id, { maxAge: 900000, httpOnly: true, secure: true});
+        response.cookie('secureId', results.rows[0].secure_id, { maxAge: 900000, httpOnly: false, secure: true});
+        response.cookie("username", results.rows[0].username, { maxAge: 900000, httpOnly: false, secure: true})
     }
 
     return passwordIsCorrect;
